@@ -1,0 +1,15 @@
+{
+	"manifest_version": 3,
+  	"name": "Simple Blank Tab",
+    "description": "Blank Tab with informations",
+    "version": "0.0.0.1",
+    "permissions" : [
+        "bookmarks",
+        "storage",
+        "sessions",
+        "tabs"        
+    ],
+    "chrome_url_overrides" : {
+        "newtab": "newpage.html"
+    }
+ }
