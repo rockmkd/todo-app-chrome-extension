@@ -1,96 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blank Tab</title>
-<style>
-
-
-body, html {
-    height: 100%;
-    margin: 0;
-}
-
-#bgimg {
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    position: relative;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-.topleft {
-    position: absolute;
-    top: 0;
-    left: 16px;
-}
-
-.middle {
-    width: 100%;
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-.bottom{
-  top: 95%;
-  font-size: "20px";
-}
-.orignal_image{
-  position: absolute;
-  top: 95%;
-}
-
-
-
-#myVideo {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-}
-
-/* Add some content at the bottom of the video/page */
-.content {
-    position: fixed;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    color: #f1f1f1;
-    width: 100%;
-    padding: 20px;
-}
-
-/* Style the button used to pause/play the video */
-#myBtn {
-    width: 200px;
-    font-size: 18px;
-    padding: 10px;
-    border: none;
-    background: #000;
-    color: #fff;
-    cursor: pointer;
-}
-
-#myBtn:hover {
-    background: #ddd;
-    color: black;
-}
-
-
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blank Tab</title>
+  <meta name="description" content="" />
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css'>
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
+  <link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
-<body>
-    <script defer src="background.js"></script>
-    <span style="font-size: 20vh;font-weight: 100;text-shadow: 0 0 2px gray;" id="time"></span><br>
-    <span style=" font-size: 5vh;font-weight: 200;text-shadow: 0 0 2px gray;" id="date"></span><br><br>
-    <span style="font-size: 3vh;text-shadow: 0 0 2px gray;" id="battery"></span>
+
+<body class="body">
+  <script defer src="background.js"></script>
+  <div class="container">
+    <div class="today"></div>
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3">
+        <div class="add-control">
+          <div class="form-group has-feedback">
+            <input type="text" class="form-control" placeholder="✍️ New" />
+            <i class="fa fa-plus form-control-feedback add-btn" title="New"></i>
+          </div>
+        </div>
+        <p class="err text-danger text-center hidden"><i class="fa fa-warning"></i> 할 일을 적어주세요.</p>
+        <p class="no-items text-muted text-center hidden"><i class="fa fa-ban"></i></p>
+        <ul class="todo-list">
+        </ul>
+      </div>
+    </div>
   </div>
-  <div class="middle bottom" id="device">
+  </section>
+  </main>
   </div>
-  </div>
+  <script src="jquery.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script src="scrollreveal.min.js"></script>
 </body>
 </html>
