@@ -1,24 +1,25 @@
 var state = [];
 
-interface State {
-    status: "new",
+interface Item {
+    status: "new" | "done" | "danger",
     id: string,
     title: string
 }
 
-interface States {
-    [id: string]: State
+interface Items {
+    [id: string]: Item
 }
 
-function setDefaultState(): void {
+function setDefaultState(): Items {
   const id = generateID();
-  const baseState: States = {};
+  const baseState: Items = {};
   baseState[id] = {
     status: "new",
     id: id,
     title: "This site uses 🍪to keep track of your tasks"
   };
   syncState(baseState);
+  return baseState;
 }
 
 function generateID(): string {
@@ -44,14 +45,9 @@ function setToDone(id: string) {
 }
 
 function deleteTodo(id: string) {
-  console.log(id)
   var baseState = getState();
   delete baseState[id]
   syncState(baseState)
-}
-
-function resetState() {
-  localStorage.setItem("state", '');
 }
 
 function syncState(state: any) {
@@ -59,8 +55,6 @@ function syncState(state: any) {
 }
 
 function getState() {
-console.log('before')
-    
   return JSON.parse(localStorage.getItem("state") || '{}');
 }
 
@@ -72,28 +66,22 @@ function addItem(text: string, status?: string, id?: string, noUpdate?: boolean)
     id +
     '" class="animated flipInX ' +
     c +
-    '"><div class="checkbox"><span class="close"><i class="fa fa-times"></i></span><label><span class="checkbox-mask"></span><input type="checkbox" />' +
+    '"><div class="checkbox"><span class="close"><i class="fa fa-times"></i></span><span class="edit"><i class="fa fa-pencil-square"></i></span><label><span class="checkbox-mask"></span><input type="checkbox" />' +
     text +
     "</label></div></li>";
 
   var isError = $(".form-control").hasClass("hidden");
 
   if (text === "") {
-    $(".err")
-      .removeClass("hidden")
-      .addClass("animated bounceIn");
+    $(".err").removeClass("hidden").addClass("animated bounceIn");
   } else {
     $(".err").addClass("hidden");
     $(".todo-list").append(item);
   }
 
-  $(".refresh").removeClass("hidden");
-
   $(".no-items").addClass("hidden");
 
-  $(".form-control")
-    .val("")
-    .attr("placeholder", "✍️ Add item...");
+//   $(".form-control").val("").attr("placeholder", "✍️ Add item...");
   setTimeout(function() {
     $(".todo-list li").removeClass("animated flipInX");
   }, 500);
@@ -101,23 +89,6 @@ function addItem(text: string, status?: string, id?: string, noUpdate?: boolean)
   if (!noUpdate) {
     pushToState(text, "new", id);
   }
-}
-
-function refresh() {
-  $(".todo-list li").each(function(i) {
-    $(this)
-      .delay(70 * i)
-      .queue(function() {
-        $(this).addClass("animated bounceOutLeft");
-        $(this).dequeue();
-      });
-  });
-
-  setTimeout(function() {
-    $(".todo-list li").remove();
-    $(".no-items").removeClass("hidden");
-    $(".err").addClass("hidden");
-  }, 800);
 }
 
 $(function() {
@@ -136,9 +107,7 @@ $(function() {
     addItem(itemVal?.toString() || '');
     formControl.focus();
   });
-
-  $(".refresh").on("click", refresh);
-
+  
   $(".todo-list").on("click", 'input[type="checkbox"]', function() {
     var li = $(this)
       .parent()
@@ -155,16 +124,13 @@ $(function() {
   });
 
   $(".todo-list").on("click", ".close", function() {
-    var box = $(this)
-      .parent()
-      .parent();
+    var box = $(this).parent().parent();
 
     if ($(".todo-list li").length == 1) {
       box.removeClass("animated flipInX").addClass("animated                bounceOutLeft");
       setTimeout(function() {
         box.remove();
         $(".no-items").removeClass("hidden");
-        $(".refresh").addClass("hidden");
       }, 500);
     } else {
       box.removeClass("animated flipInX").addClass("animated bounceOutLeft");
@@ -182,17 +148,14 @@ $(function() {
       addItem(itemVal?.toString() || '');
     }
   });
-//   $(".todo-list").sortable();
+  $(".todo-list").sortable();
 //   $(".todo-list").disableSelection();
 });
 
-var todayContainer = document.querySelector(".today");
-
-if ( todayContainer ) {
+function today(): string {
     var d = new Date();
     const weekday = ['일', '월', '화', '수', '목', '금', '토']
-
-    todayContainer.innerHTML = [
+    return [
         d.getMonth(), '월 ', 
         d.getDate(), '일 ', 
         '(', weekday[d.getDay()],') ', 
@@ -200,6 +163,13 @@ if ( todayContainer ) {
         d.getMinutes(), '분', 
     ].join('');
 
+}
+
+var todayContainer = document.querySelector(".today");
+
+// document.querySelector(".today")?.innerHTML = today()
+if (todayContainer) {
+    todayContainer.innerHTML = today();
 }
 
 $(document).ready(function() {
@@ -214,75 +184,5 @@ $(document).ready(function() {
     var todo = state[todoKey];
     addItem(todo.title, todo.status, todo.id, true);
   });
-
-  var mins: number, secs: number, update: number;
-
-  init();
-  function init() {
-    (mins = 25), (secs = 59);
-  }
-
-
-  set();
-  function set() {
-    $(".mins").text(mins);
-  }
-
-
-  $("#start").on("click", start_timer);
-  $("#reset").on("click", reset);
-  $("#inc").on("click", inc);
-  $("#dec").on("click", dec);
-
-  function start_timer() {
-
-    set();
-
-    $(".dis").attr("disabled", "true");
-
-    $(".mins").text(--mins);
-    $(".separator").text(":");
-    update_timer();
-
-    const update = setInterval(update_timer, 1000);
-  }
-
-  function update_timer() {
-    $(".secs").text(secs);
-    --secs;
-    if (mins == 0 && secs < 0) {
-      reset();
-    } else if (secs < 0 && mins > 0) {
-      secs = 59;
-      --mins;
-      $(".mins").text(mins);
-    }
-  }
-
-
-  function reset() {
-    clearInterval(update);
-    $(".secs").text("");
-    $(".separator").text("");
-    init();
-    $(".mins").text(mins);
-    $(".dis").attr("disabled", "false");
-  }
-
-
-  function inc() {
-    mins++;
-    $(".mins").text(mins);
-  }
-
-
-  function dec() {
-    if (mins > 1) {
-      mins--;
-      $(".mins").text(mins);
-    } else {
-      alert("This is the minimum limit.");
-    }
-  }
 }); 
 
