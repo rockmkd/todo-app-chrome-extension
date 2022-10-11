@@ -109,10 +109,7 @@ $(function() {
   });
   
   $(".todo-list").on("click", 'input[type="checkbox"]', function() {
-    var li = $(this)
-      .parent()
-      .parent()
-      .parent();
+    var li = $(this).parent().parent().parent();
     li.toggleClass("danger");
     li.toggleClass("animated flipInX");
 
@@ -123,11 +120,15 @@ $(function() {
     }, 500);
   });
 
+  $(".todo-list").on("click", ".edit", function() {
+    var box = $(this).parent().parent();
+  });
+  
   $(".todo-list").on("click", ".close", function() {
     var box = $(this).parent().parent();
 
     if ($(".todo-list li").length == 1) {
-      box.removeClass("animated flipInX").addClass("animated                bounceOutLeft");
+      box.removeClass("animated flipInX").addClass("animated bounceOutLeft");
       setTimeout(function() {
         box.remove();
         $(".no-items").removeClass("hidden");
@@ -150,13 +151,14 @@ $(function() {
   });
   $(".todo-list").sortable();
 //   $(".todo-list").disableSelection();
+    init();
 });
 
 function today(): string {
     var d = new Date();
     const weekday = ['일', '월', '화', '수', '목', '금', '토']
     return [
-        d.getMonth(), '월 ', 
+        d.getMonth() + 1, '월 ', 
         d.getDate(), '일 ', 
         '(', weekday[d.getDay()],') ', 
         d.getHours(), '시 ', 
@@ -172,17 +174,16 @@ if (todayContainer) {
     todayContainer.innerHTML = today();
 }
 
-$(document).ready(function() {
-  var state = getState();
+function init() {
+    var state = getState();
 
-  if (!state) {
-    setDefaultState();
-    state = getState();
-  }
-
-  Object.keys(state).forEach(function(todoKey) {
-    var todo = state[todoKey];
-    addItem(todo.title, todo.status, todo.id, true);
-  });
-}); 
-
+    if (!state) {
+      setDefaultState();
+      state = getState();
+    }
+  
+    Object.keys(state).forEach(function(todoKey) {
+      var todo = state[todoKey];
+      addItem(todo.title, todo.status, todo.id, true);
+    });
+}

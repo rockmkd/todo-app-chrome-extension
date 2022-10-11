@@ -88,10 +88,15 @@
     right: 10px;
     font-size: 16px;
 }
-
 .todo-list li .edit  {
     right: 30px;
     margin-top: -10px;
+    opacity: 0.4;
+}
+
+.todo-list li .edit:hover {
+    cursor: pointer;
+    opacity: 0.8;
 }
 
 .todo-list li .close .fa, .todo-list li .edit .fa {
@@ -124,24 +129,6 @@
 
 .add-control .form-control {
     padding-right: 25px;
-}
-
-.add-control .refresh {
-    position: absolute;
-    top: 8px;
-    right: 0;
-    font-size: 14px;
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%);
-    margin-right: -10px;
-    cursor: pointer;
-    color: #9da1af;
-    -webkit-transition: color 0.15s linear;
-    transition: color 0.15s linear;
-}
-
-.add-control .refresh:hover {
-    color: #666;
 }
 
 .form-control,
@@ -349,7 +336,11 @@ a:hover {
 .fa-remove:before,
 .fa-close:before,
 .fa-times:before {
-    content: "\f00d";
+    content: "\f00d";    
+    color: #000;
+}
+.fa-pencil-square:before {
+    content: "\f14b";
     color: #000;
 }
 
