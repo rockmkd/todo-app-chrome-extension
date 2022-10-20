@@ -1,5 +1,3 @@
-var state = [];
-
 interface Item {
     status: "new" | "done" | "danger",
     id: string,
@@ -10,6 +8,11 @@ interface Items {
     [id: string]: Item
 }
 
+function generateID(): string {
+    var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    return randLetter + Date.now();
+  }
+  
 function setDefaultState(): Items {
   const id = generateID();
   const baseState: Items = {};
@@ -18,40 +21,46 @@ function setDefaultState(): Items {
     id: id,
     title: "This site uses 🍪to keep track of your tasks"
   };
-  syncState(baseState);
+  saveState(baseState);
   return baseState;
-}
-
-function generateID(): string {
-  var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-  return randLetter + Date.now();
 }
 
 function pushToState(title: string, status: string, id: string) {
   var baseState = getState();
   baseState[id] = { id: id, title: title, status: status };
-  syncState(baseState);
+  saveState(baseState);
 }
 
 function setToDone(id: string) {
-  var baseState = getState();
+  var baseState = getState();  
   if (baseState[id].status === 'new') {
     baseState[id].status = 'done'
   } else {
     baseState[id].status =  'new';
   }
 
-  syncState(baseState);
+  saveState(baseState);
+}
+
+function updateTitle(id: string, title: string){
+    var baseState = getState();  
+    baseState[id].title = title;
+  
+    saveState(baseState);
 }
 
 function deleteTodo(id: string) {
   var baseState = getState();
   delete baseState[id]
-  syncState(baseState)
+  saveState(baseState)
 }
 
-function syncState(state: any) {
+function saveState(state: any) {
   localStorage.setItem("state", JSON.stringify(state));
+}
+
+function getItem(itemId: string): Item {
+    return getState()[itemId];
 }
 
 function getState() {
@@ -66,9 +75,9 @@ function addItem(text: string, status?: string, id?: string, noUpdate?: boolean)
     id +
     '" class="animated flipInX ' +
     c +
-    '"><div class="checkbox"><span class="close"><i class="fa fa-times"></i></span><span class="edit"><i class="fa fa-pencil-square"></i></span><label><span class="checkbox-mask"></span><input type="checkbox" />' +
+    '"><div class="checkbox"><span class="close"><i class="fa fa-times"></i></span><span class="edit"><i class="fa fa-pencil-square"></i></span><label><span class="checkbox-mask"></span><input type="checkbox" /><span class="text">' +
     text +
-    "</label></div></li>";
+    "</span></label></div></li>";
 
   var isError = $(".form-control").hasClass("hidden");
 
@@ -121,7 +130,29 @@ $(function() {
   });
 
   $(".todo-list").on("click", ".edit", function() {
-    var box = $(this).parent().parent();
+    const box = $(this).parent().parent();
+    const item: Item = getItem(box.data().id)
+    
+    const checkbox = $(".checkbox", box) 
+    checkbox.addClass('hidden');    
+    
+    const input = '<input type="text" class="modify form-control" value="'+item.title+'">'
+    const $input = box.append(input);    
+  });
+  
+  $(".todo-list").on("keypress", ".form-control", function(e) {
+    if( e.keyCode === 13 ){
+        const box = $(e.currentTarget).parent();
+        const title =  $(e.currentTarget).val()?.toString() || '';
+        const id = box.data().id;
+        updateTitle(id, title);
+        
+        const checkbox = $(".checkbox", box) 
+        checkbox.removeClass('hidden');
+        $(".text", box).text(title);
+        
+        $(".form-control", box).remove();
+    }
   });
   
   $(".todo-list").on("click", ".close", function() {
@@ -142,6 +173,13 @@ $(function() {
 
     deleteTodo(box.data().id)
   });
+
+  $(document).on('keyup', function(e) {
+    if ( e.keyCode === 27 ){
+        
+    }
+  });
+
 
   $(".form-control").keypress(function(e) {
     if (e.which == 13) {
