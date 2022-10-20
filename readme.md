@@ -10,3 +10,5 @@ Simple Todo app that uses local storage.
    ~ $ npm run build
    ```
 1. When the output is created in the `dist` directory, install it in Chrome.
+
+Test
