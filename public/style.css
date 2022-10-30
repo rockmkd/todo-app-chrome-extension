@@ -7,12 +7,6 @@
     font-size: 22px;
 }
 
-.animated.bounceIn,
-.animated.bounceOut,
-.animated.flipOutX,
-.animated.flipOutY {
-    font-size: 13px;
-}
 
 .container {
     padding-top: 75px;
@@ -60,7 +54,7 @@
 
 .todo-list li label {
     display: block;
-    padding-right: 10px;
+    padding-right: 10px;    
 }
 
 .todo-list li label input[type="checkbox"] {
@@ -78,7 +72,7 @@
     margin-top: 4px;
 }
 
-.todo-list li .close, .todo-list li .edit {
+.todo-list li .close, .todo-list li .edit, .todo-list li .copy {
     display: none;
     position: absolute;
     width: 12px;
@@ -93,17 +87,28 @@
     margin-top: -10px;
     opacity: 0.4;
 }
-
 .todo-list li .edit:hover {
     cursor: pointer;
     opacity: 0.8;
 }
 
-.todo-list li .close .fa, .todo-list li .edit .fa {
+.todo-list li .copy  {
+    right: 50px;
+    margin-top: -10px;
+    opacity: 0.4;
+}
+
+.todo-list li .copy:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+
+.todo-list li .close .fa, .todo-list li .edit .fa, .todo-list li .copy .fa {
     line-height: 16px;
 }
 
-.todo-list li:hover .close, .todo-list li:hover .edit {
+.todo-list li:hover .close, .todo-list li:hover .edit, .todo-list li:hover .copy {
     display: block;    
 }
 
@@ -341,6 +346,10 @@ a:hover {
 }
 .fa-pencil-square:before {
     content: "\f14b";
+    color: #000;
+}
+.fa-clipboard:before {
+    content: "\f0ea";
     color: #000;
 }
 

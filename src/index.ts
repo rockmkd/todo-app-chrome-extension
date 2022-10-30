@@ -31,7 +31,7 @@ function pushToState(title: string, status: string, id: string) {
   saveState(baseState);
 }
 
-function setToDone(id: string) {
+function toggleToDone(id: string) {
   var baseState = getState();  
   if (baseState[id].status === 'new') {
     baseState[id].status = 'done'
@@ -70,14 +70,16 @@ function getState() {
 function addItem(text: string, status?: string, id?: string, noUpdate?: boolean) {
   id = id ? id : generateID();
   var c = status === "done" ? "danger" : "";
-  var item =
-    '<li data-id="' +
-    id +
-    '" class="animated flipInX ' +
-    c +
-    '"><div class="checkbox"><span class="close"><i class="fa fa-times"></i></span><span class="edit"><i class="fa fa-pencil-square"></i></span><label><span class="checkbox-mask"></span><input type="checkbox" /><span class="text">' +
-    text +
-    "</span></label></div></li>";
+  var item = `<li data-id="${id}" class="animated flipInX ${c}">
+      <div class="checkbox">
+      <span class="copy"><i class="fa fa-clipboard"></i></span>
+      <span class="close"><i class="fa fa-times"></i></span>
+      <span class="edit"><i class="fa fa-pencil-square"></i></span>
+      <label>
+        <span class="checkbox-mask"></span>
+        <input type="checkbox" />
+        <span class="text">${text}</span>
+      </label></div></li>`;
 
   var isError = $(".form-control").hasClass("hidden");
 
@@ -120,13 +122,8 @@ $(function() {
   $(".todo-list").on("click", 'input[type="checkbox"]', function() {
     var li = $(this).parent().parent().parent();
     li.toggleClass("danger");
-    li.toggleClass("animated flipInX");
 
-    setToDone(li.data().id);
-
-    setTimeout(function() {
-      li.removeClass("animated flipInX");
-    }, 500);
+    toggleToDone(li.data().id);
   });
 
   $(".todo-list").on("click", ".edit", function() {
@@ -138,6 +135,13 @@ $(function() {
     
     const input = '<input type="text" class="modify form-control" value="'+item.title+'">'
     const $input = box.append(input);    
+  });
+
+  $(".todo-list").on("click", ".copy", function() {
+    const box = $(this).parent().parent();
+    const item: Item = getItem(box.data().id)
+
+    navigator.clipboard.writeText(item.title)
   });
   
   $(".todo-list").on("keypress", ".form-control", function(e) {
@@ -175,6 +179,7 @@ $(function() {
   });
 
   $(document).on('keyup', function(e) {
+    // cancel editing
     if ( e.keyCode === 27 ){
         
     }
