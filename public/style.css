@@ -353,15 +353,15 @@ a:hover {
     color: #000;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 2048px) {
     .col-xs-offset-3 {
-        margin-left: 10%;
+        margin-left: 20%;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 2048px) {
     .col-xs-6 {
-        width: 80%;
+        width: 60%;
     }
 }
 
@@ -370,7 +370,7 @@ a:hover {
     zoom: 1;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 2048px) {
     .container {
         width: 100%;
         /* max-width: 1150PX; */
